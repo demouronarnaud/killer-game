@@ -535,6 +535,32 @@ export default function KillerGame() {
   const [showWordCodeInput, setShowWordCodeInput] = useState("");
   const [showWordError, setShowWordError] = useState(false);
 
+  // --- Persistance locale (localStorage) ---
+  // Au démarrage, on charge depuis localStorage
+  useEffect(() => {
+    try {
+      const s = localStorage.getItem("killer_savedGames");
+      if (s) setSavedGames(JSON.parse(s));
+    } catch (e) {}
+    try {
+      const h = localStorage.getItem("killer_gameHistory");
+      if (h) setGameHistory(JSON.parse(h));
+    } catch (e) {}
+  }, []);
+
+  // A chaque modification, on sauvegarde dans localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem("killer_savedGames", JSON.stringify(savedGames));
+    } catch (e) {}
+  }, [savedGames]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("killer_gameHistory", JSON.stringify(gameHistory));
+    } catch (e) {}
+  }, [gameHistory]);
+
   const flash = (msg) => { setFlashMsg(msg); setTimeout(()=>setFlashMsg(""),2500); };
 
   const addPlayer = () => {
